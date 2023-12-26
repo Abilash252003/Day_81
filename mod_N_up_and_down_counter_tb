@@ -1,0 +1,57 @@
+///100 Days of RTL///
+
+///Abilash P///
+
+///Mod N Up and Down counter (Synchronous Reset)///
+
+module counter_tb ();
+  reg [4:0]N;
+  reg CLK, RST, up_or_down;
+  wire [4:0]out;
+  
+  counter DUT (.N(N), .up_or_down(up_or_down), .CLK(CLK), .RST(RST), .out(out));
+  
+  initial 
+    begin
+      CLK=1;
+      forever #5 CLK = ~CLK;  
+    end
+  
+  initial
+    begin
+      N          = 5'b01100;
+      up_or_down = 1'b0;
+      RST        = 1'b1;
+      #10;
+      RST        = 1'b0;
+      #120;
+      up_or_down = 1'b1;
+      RST        = 1'b1;
+      #10;
+      RST        = 1'b0;
+      #120;
+      
+      N          = 5'b00111;
+      up_or_down = 1'b0;
+      RST        = 1'b1;
+      #10;
+      RST        = 1'b0;
+      #70;
+      up_or_down = 1'b1;
+      RST        = 1'b1;
+      #10;
+      RST        = 1'b0;
+      #70;
+      $finish;
+    end
+  
+    initial
+     begin
+       $dumpfile("dump.vcd");
+       $dumpvars(1);
+     end
+  
+  initial
+    $monitor("simtime = %g, CLK = %b, Reset = %b, up_or_down = %b, N = %d, out = %b", $time, CLK, RST, up_or_down, N, out);
+  
+endmodule
